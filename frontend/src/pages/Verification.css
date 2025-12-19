@@ -1,0 +1,38 @@
+.reassign-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.alternatives-row {
+  background-color: #f8f9fa;
+}
+
+.alternatives-info {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.alternative-tag {
+  padding: 0.25rem 0.75rem;
+  background-color: #e9ecef;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.text-muted {
+  color: #999;
+  font-style: italic;
+}
+
+

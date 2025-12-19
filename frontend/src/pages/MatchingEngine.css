@@ -1,0 +1,94 @@
+.weights-container {
+  margin: 2rem 0;
+}
+
+.weight-summary {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.weight-summary .warning {
+  color: #856404;
+  font-weight: normal;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.score-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.score-badge.high {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.score-badge.medium {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.score-badge.low {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.status-badge.verified {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.alternatives {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alternative-item {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.text-muted {
+  color: #999;
+  font-style: italic;
+}
+
+.unmatched-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.unmatched-item {
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+

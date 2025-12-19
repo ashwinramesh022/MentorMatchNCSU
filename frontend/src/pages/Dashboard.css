@@ -1,0 +1,17 @@
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  min-width: 150px;
+}
+
+.dashboard .card p {
+  margin: 0.5rem 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+
