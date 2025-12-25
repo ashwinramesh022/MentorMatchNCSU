@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getMatches, verifyMatch, getData } from '../utils/api'
+import * as XLSX from 'xlsx'
 import './Verification.css'
 
 function Verification() {
@@ -68,6 +69,91 @@ function Verification() {
   const handleCancelReassign = () => {
     setReassigning(null)
     setNewMentorId('')
+  }
+
+  const handleExportToExcel = async () => {
+    const verifiedMatches = matches.filter(m => m.status === 'verified' && m.verified)
+    
+    if (verifiedMatches.length === 0) {
+      setMessage({ type: 'error', text: 'No verified matches to export' })
+      return
+    }
+
+    try {
+      // Fetch full mentor and mentee data to get additional details
+      const [mentorsData, menteesData] = await Promise.all([
+        getData('mentor'),
+        getData('mentee')
+      ])
+      
+      const allMentors = mentorsData.data || []
+      const allMentees = menteesData.data || []
+      
+      // Create lookup maps
+      const mentorMap = new Map(allMentors.map(m => [m.id, m]))
+      const menteeMap = new Map(allMentees.map(m => [m.id, m]))
+
+      // Prepare data for Excel with full details
+      const excelData = verifiedMatches.map((match, index) => {
+        const mentor = mentorMap.get(match.mentor_id) || {}
+        const mentee = menteeMap.get(match.mentee_id) || {}
+        
+        return {
+          'Match #': index + 1,
+          'Mentee Name': match.mentee_name || mentee.name || '',
+          'Mentee Email': mentee.email || mentee.Email || '',
+          'Mentee ID': match.mentee_id || '',
+          'Mentee Discipline': mentee.discipline || '',
+          'Mentee Location': mentee.location || '',
+          'Mentee Mode': mentee.mode || '',
+          'Mentor Name': match.mentor_name || mentor.name || '',
+          'Mentor Email': mentor.email || mentor.Email || '',
+          'Mentor ID': match.mentor_id || '',
+          'Mentor Discipline': mentor.discipline || '',
+          'Mentor Location': mentor.location || '',
+          'Mentor Mode': mentor.mode || '',
+          'Compatibility Score (%)': ((match.score || 0) * 100).toFixed(1),
+          'Status': 'Verified',
+          'Date Exported': new Date().toLocaleDateString()
+        }
+      })
+
+      // Create workbook and worksheet
+      const ws = XLSX.utils.json_to_sheet(excelData)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Verified Matches')
+
+      // Set column widths
+      const colWidths = [
+        { wch: 10 }, // Match #
+        { wch: 25 }, // Mentee Name
+        { wch: 30 }, // Mentee Email
+        { wch: 12 }, // Mentee ID
+        { wch: 20 }, // Mentee Discipline
+        { wch: 20 }, // Mentee Location
+        { wch: 15 }, // Mentee Mode
+        { wch: 25 }, // Mentor Name
+        { wch: 30 }, // Mentor Email
+        { wch: 12 }, // Mentor ID
+        { wch: 20 }, // Mentor Discipline
+        { wch: 20 }, // Mentor Location
+        { wch: 15 }, // Mentor Mode
+        { wch: 20 }, // Compatibility Score
+        { wch: 12 }, // Status
+        { wch: 15 }  // Date Exported
+      ]
+      ws['!cols'] = colWidths
+
+      // Generate filename with current date
+      const filename = `Verified_Matches_${new Date().toISOString().split('T')[0]}.xlsx`
+
+      // Download file
+      XLSX.writeFile(wb, filename)
+      setMessage({ type: 'success', text: `Exported ${verifiedMatches.length} verified matches to Excel` })
+    } catch (error) {
+      console.error('Error exporting to Excel:', error)
+      setMessage({ type: 'error', text: 'Failed to export matches. Please try again.' })
+    }
   }
 
   const pendingMatches = matches.filter(m => m.status === 'pending' || !m.verified)
@@ -188,8 +274,21 @@ function Verification() {
       </div>
 
       <div className="card">
-        <h2>Verified Matches ({verifiedMatches.length})</h2>
-        <p>Matches that have been approved and finalized.</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div>
+            <h2 style={{ margin: 0 }}>Verified Matches ({verifiedMatches.length})</h2>
+            <p style={{ margin: '0.5rem 0 0 0' }}>Matches that have been approved and finalized.</p>
+          </div>
+          {verifiedMatches.length > 0 && (
+            <button 
+              className="btn btn-success" 
+              onClick={handleExportToExcel}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              📥 Export to Excel
+            </button>
+          )}
+        </div>
 
         {verifiedMatches.length === 0 ? (
           <p className="text-muted">No verified matches yet.</p>

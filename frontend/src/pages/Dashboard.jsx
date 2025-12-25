@@ -138,6 +138,16 @@ function Dashboard() {
           parameters, verify matches, and view detailed reports.
         </p>
       </div>
+
+      <div className="card">
+        <h2>ℹ️ Data Persistence</h2>
+        <div className="alert alert-info">
+          <strong>All data is shared across all users.</strong> When you upload mentors or mentees, 
+          verify matches, or make any changes, they are immediately visible to everyone using the 
+          application. The data is stored on the server and persists across sessions. This ensures 
+          that all team members are working with the same up-to-date information.
+        </div>
+      </div>
     </div>
   )
 }
